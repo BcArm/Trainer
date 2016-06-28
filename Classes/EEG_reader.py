@@ -433,20 +433,33 @@ class EEGReader(QThread):
     
     # epoc details
     rcList = []
+    currentChar = 0
     e = 0
 
     # data to be written in files
     isFlashing = 0
     stimulusCode = 0
+    stimulusType = 0
     
     # samples counters
     counter = 0
+    next_counter = 0
     currentLimit = 0
+    row = 0
+    col = 0
 
     # files
     Flashing = []
     StimulusCode = []
+    StimulusType = []
     Samples = []
+
+
+    # files
+    foutFlashing = 0
+    foutStimulusCode = 0
+    foutStimulusType = 0
+    
 
     # classifier model
     model = 0
@@ -461,11 +474,11 @@ class EEGReader(QThread):
     markAsNormal = pyqtSignal(int)
     brk = pyqtSignal()
 
-    # final label
-    finalLabel = 'BAD'
     
     # target characters 
-    magic = list("HEIBAGAFBGIADCBIFCFCDGCDAHEIBD")
+    magic = list("ABCDEFGHIABCDEFGHIABCDEFGHIABC")
+    
+    
 
     # current target character
     currentTarget = None
@@ -473,21 +486,27 @@ class EEGReader(QThread):
     # indicates if it's break time or not
     isBreak = False
 
+
     def updateFileValues(self, rc, isOn):
         if (isOn):
             self.isFlashing = 1
             self.stimulusCode = rc + 1
+            if (self.getRow(self.currentChar) == rc or self.getCol(self.currentChar) == rc - 3):
+                self.stimulusType = 1
+            else:
+                self.stimulusType = 0
         else:
             self.isFlashing = 0
             self.stimulusCode = 0
+            self.stimulusType = 0
 
     def toggleState(self):
         if (self.currentLimit == 320):
-            self.currentLimit = 26;
+            self.currentLimit = 36;
             # unmark current target
             self.markAsNormal.emit(self.currentTarget)
         elif (self.isFlashing):
-            self.currentLimit = 26;
+            self.currentLimit = 36;
             self.etfy();
         else:
             self.currentLimit = 13;
@@ -523,16 +542,36 @@ class EEGReader(QThread):
                 random.shuffle(Z)
             self.rcList += list(Z)
 
+
+    def getRow(self, c):
+        ''' given a character c, returns the row including the character in the screen '''
+        x = ord(c) - ord('A')
+        return x // 3
+
+    def getCol(self, c):
+        ''' given a character c, returns the column including the character in the screen '''
+        x = ord(c) - ord('A')
+        return x % 3
+
     # starts a new epoch
     def startEpoch(self):
         n = len(self.magic)
+        print(str(n) + " " + str(len(self.magic)))
         '''if ((n == 10 or n == 20) and not self.isBreak):
             self.isBreak = True
             self.brk.emit()
         else:
             self.isBreak = False'''
         if (n > 0 and not self.isBreak):
+
+            # Fetch the next character and find its position on the screen matrix
+            self.currentChar = self.magic[-1]
+            
+            self.row = self.getRow(self.currentChar)
+            self.col = self.getCol(self.currentChar)
+
             self.epochEnded = False
+
             # mark target for 2.5 seconds
             self.currentLimit = 320
             self.currentTarget = ord(self.magic.pop())
@@ -540,6 +579,40 @@ class EEGReader(QThread):
             # fill rcList with rows and columns to be flashed
             self.fillRcList()
             self.go()
+        else:
+            cont = 160 # 320 / 2
+            while cont > 0:
+                try:
+                    data = self.e.get_sample()
+                    
+                    if data:
+                        cont -= 1
+                        self.counter += 1
+                        for i,channel in enumerate(self.e.channel_mask):
+                            x = data[i]
+                            self.foutSamplesData.write(str(data[i]) + " ");
+                        self.foutSamplesData.write("\n");
+                        
+                        # flashing
+                        self.foutFlashing.write(str(self.isFlashing) + " ");
+                        self.foutFlashing.write("\n");
+
+                        # stimulus code
+                        self.foutStimulusCode.write(str(self.stimulusCode) + " ");
+                        self.foutStimulusCode.write("\n");
+
+                        # stimulus type
+                        self.foutStimulusType.write(str(self.stimulusType) + " ");
+                        self.foutStimulusType.write("\n");
+                except EPOCTurnedOffError, ete:
+                    print ete
+                except KeyboardInterrupt, ki:
+                    self.e.disconnect()
+                    return 0
+            self.foutFlashing.close()
+            self.foutStimulusCode.close()
+            self.foutStimulusType.close()
+            
 
     def run(self):
         ''' Break for 2.5 seconds
@@ -547,14 +620,30 @@ class EEGReader(QThread):
         self.Flashing = []
         self.StimulusCode = []
         self.Samples = []
+        self.StimulusType = []
         self.epochEnded = False
         self.counter = 0
         self.isFlashing = 0
         self.stimulusCode = 0
         self.rcList = []
-        self.finalLabel = -1
 
         self.e.acquire_data_fast(5);
+        random.shuffle(self.magic);
+        self.magic.reverse()
+        print(self.magic)
+        fout = open("trueChars.txt", "w")
+        fout.write(str(self.magic))
+        fout.close()
+        self.magic.reverse()
+
+
+        # Files
+        self.foutFlashing = open("flashing.txt", "w")
+        self.foutStimulusCode = open("stimulusCode.txt", "w")
+        self.foutStimulusType = open("stimulusType.txt", "w")
+        self.foutSamplesData = open("samplesData.txt", "w")
+
+
         self.startEpoch()
 
     def __init__(self):
@@ -567,13 +656,23 @@ class EEGReader(QThread):
                 data = self.e.get_sample()
                 if data:
                     self.counter += 1
-                    self.Samples.append([])
+
                     for i,channel in enumerate(self.e.channel_mask):
-                        self.Samples[-1].append(data[i])
+                        self.foutSamplesData.write(str(data[i]) + " ");
+                    self.foutSamplesData.write("\n");
+                    
                     # flashing
-                    self.Flashing.append(self.isFlashing);
+                    self.foutFlashing.write(str(self.isFlashing) + " ");
+                    self.foutFlashing.write("\n");
+
                     # stimulus code
-                    self.StimulusCode.append(self.stimulusCode);
+                    self.foutStimulusCode.write(str(self.stimulusCode) + " ");
+                    self.foutStimulusCode.write("\n");
+
+                    # stimulus type
+                    self.foutStimulusType.write(str(self.stimulusType) + " ");
+                    self.foutStimulusType.write("\n");
+
                     if (self.counter >= self.currentLimit):
                         self.toggleState();
                         self.counter = 0;
