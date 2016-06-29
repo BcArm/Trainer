@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1366</width>
-    <height>768</height>
+    <width>800</width>
+    <height>480</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,15 +20,15 @@
    <widget class="QLabel" name="B">
     <property name="geometry">
      <rect>
-      <x>595</x>
-      <y>30</y>
-      <width>200</width>
-      <height>200</height>
+      <x>340</x>
+      <y>0</y>
+      <width>120</width>
+      <height>120</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>96</pointsize>
+      <pointsize>48</pointsize>
      </font>
     </property>
     <property name="styleSheet">
@@ -44,15 +44,15 @@
    <widget class="QLabel" name="A">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>30</y>
-      <width>200</width>
-      <height>200</height>
+      <x>0</x>
+      <y>0</y>
+      <width>120</width>
+      <height>120</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>96</pointsize>
+      <pointsize>48</pointsize>
      </font>
     </property>
     <property name="styleSheet">
@@ -68,15 +68,15 @@
    <widget class="QLabel" name="C">
     <property name="geometry">
      <rect>
-      <x>1050</x>
-      <y>30</y>
-      <width>200</width>
-      <height>200</height>
+      <x>680</x>
+      <y>0</y>
+      <width>120</width>
+      <height>120</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>96</pointsize>
+      <pointsize>48</pointsize>
      </font>
     </property>
     <property name="styleSheet">
@@ -92,15 +92,15 @@
    <widget class="QLabel" name="E">
     <property name="geometry">
      <rect>
-      <x>595</x>
-      <y>290</y>
-      <width>200</width>
-      <height>200</height>
+      <x>340</x>
+      <y>180</y>
+      <width>120</width>
+      <height>120</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>96</pointsize>
+      <pointsize>48</pointsize>
      </font>
     </property>
     <property name="styleSheet">
@@ -116,15 +116,15 @@
    <widget class="QLabel" name="D">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>290</y>
-      <width>200</width>
-      <height>200</height>
+      <x>0</x>
+      <y>180</y>
+      <width>120</width>
+      <height>120</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>96</pointsize>
+      <pointsize>48</pointsize>
      </font>
     </property>
     <property name="styleSheet">
@@ -140,15 +140,15 @@
    <widget class="QLabel" name="F">
     <property name="geometry">
      <rect>
-      <x>1050</x>
-      <y>290</y>
-      <width>200</width>
-      <height>200</height>
+      <x>680</x>
+      <y>180</y>
+      <width>120</width>
+      <height>120</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>96</pointsize>
+      <pointsize>48</pointsize>
      </font>
     </property>
     <property name="styleSheet">
@@ -164,15 +164,15 @@
    <widget class="QLabel" name="H">
     <property name="geometry">
      <rect>
-      <x>595</x>
-      <y>540</y>
-      <width>200</width>
-      <height>200</height>
+      <x>340</x>
+      <y>360</y>
+      <width>120</width>
+      <height>120</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>96</pointsize>
+      <pointsize>48</pointsize>
      </font>
     </property>
     <property name="styleSheet">
@@ -188,15 +188,15 @@
    <widget class="QLabel" name="G">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>540</y>
-      <width>200</width>
-      <height>200</height>
+      <x>0</x>
+      <y>360</y>
+      <width>120</width>
+      <height>120</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>96</pointsize>
+      <pointsize>48</pointsize>
      </font>
     </property>
     <property name="styleSheet">
@@ -212,15 +212,15 @@
    <widget class="QLabel" name="I">
     <property name="geometry">
      <rect>
-      <x>1050</x>
-      <y>540</y>
-      <width>200</width>
-      <height>200</height>
+      <x>680</x>
+      <y>360</y>
+      <width>120</width>
+      <height>120</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>96</pointsize>
+      <pointsize>48</pointsize>
      </font>
     </property>
     <property name="styleSheet">
