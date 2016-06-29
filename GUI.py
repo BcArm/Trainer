@@ -50,7 +50,7 @@ class App(QtGui.QMainWindow, MainUI.Ui_BCARM):
 	y = self.getCol(c)
 	self.labelsList[x][y].setStyleSheet("color: rgb(61, 61, 61)")
         font = QtGui.QFont()
-        font.setPointSize(96)
+        font.setPointSize(48)
         self.labelsList[x][y].setFont(font)
 
     def markAsTarget(self, c):
@@ -58,7 +58,7 @@ class App(QtGui.QMainWindow, MainUI.Ui_BCARM):
         y = self.getCol(c)
         self.labelsList[x][y].setStyleSheet("color: rgb(255, 0, 0)")
         font = QtGui.QFont()
-        font.setPointSize(128)
+        font.setPointSize(64)
         self.labelsList[x][y].setFont(font)
 
     def flashOn(self, rc):
@@ -70,7 +70,7 @@ class App(QtGui.QMainWindow, MainUI.Ui_BCARM):
         for i in range(3):
             self.labelsList[x][y].setStyleSheet("color: rgb(255, 255, 255)")
             font = QtGui.QFont()
-            font.setPointSize(128)
+            font.setPointSize(64)
             self.labelsList[x][y].setFont(font)
             x = x + dx
             y = y + dy
@@ -84,7 +84,7 @@ class App(QtGui.QMainWindow, MainUI.Ui_BCARM):
         for i in range(3):
             self.labelsList[x][y].setStyleSheet("color: rgb(61, 61, 61)")
             font = QtGui.QFont()
-            font.setPointSize(96)
+            font.setPointSize(48)
             self.labelsList[x][y].setFont(font)
             x = x + dx
             y = y + dy
